@@ -18,7 +18,7 @@ class UserSeeder
         $user = $_ENV['DB_USER'];
         $password = $_ENV['DB_PASSWORD'];
 
-       
+
         // Check if variables are loaded correctly
         if (!$host || !$port || !$dbName || !$user) {
             throw new Exception("Database configuration is not set properly.");
@@ -36,11 +36,25 @@ class UserSeeder
     {
         // Insert sample data into the users table
         $sql = "
-            INSERT INTO users (name, email, password) VALUES
-           ('Mahesh', 'Mahesh@example.com', 'password1'),
-            ('Sachi', 'sachi@example.com', 'password1'),
-            ('Jane', 'jane@example.com', 'password2')
+            INSERT INTO users (
+                id, 
+                firstname, 
+                lastname, 
+                mobile, 
+                whatsapp, 
+                email, 
+                address, 
+                nic, 
+                username, 
+                password, 
+                role, 
+                status
+            ) VALUES
+            (NULL, 'Mahesh', 'Perera', '0771234567', '0771234567', 'mahesh@example.com', '123 Street', '901234567V', 'maheshp', 'password1', 'admin', false),
+            (NULL, 'Sachi', 'Kumar', '0779876543', '0779876543', 'sachi@example.com', '456 Avenue', '912345678V', 'sachik', 'password1', 'user', false),
+            (NULL, 'Jane', 'Doe', '0776543210', '0776543210', 'jane@example.com', '789 Road', '923456789V', 'janed', 'password2', 'user', false)
         ";
+
         $this->db->exec($sql);
         echo "Users table seeded successfully.\n";
     }

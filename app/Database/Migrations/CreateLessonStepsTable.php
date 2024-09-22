@@ -6,7 +6,7 @@ $dotenv = Dotenv\Dotenv::createImmutable(__DIR__ . '/../../../', '.env');
 $dotenv->load();
 
 
-class CreateUsersTable
+class CreateLessonStepsTable
 {
     private $db;
 
@@ -37,32 +37,27 @@ class CreateUsersTable
 
     public function up()
     {
-        // SQL query to create the users table
+        // SQL query to create the Students table
         $sql = "
-        CREATE TABLE IF NOT EXISTS users (
+        CREATE TABLE IF NOT EXISTS lesson_steps (
             id INT AUTO_INCREMENT PRIMARY KEY,
-            firstname VARCHAR(100) NOT NULL,
-            lastname VARCHAR(100) NOT NULL,
-            mobile VARCHAR(12) NOT NULL,
-            whatsapp VARCHAR(12) NOT NULL,
-            email VARCHAR(100) NOT NULL,
-            address VARCHAR(100) NOT NULL,
-            nic VARCHAR(15) NOT NULL,
-            username VARCHAR(20) NOT NULL,
-            password VARCHAR(255) NOT NULL,
-            role VARCHAR(15) NOT NULL,
-            status BOOLEAN NOT NULL DEFAULT false
+            LessonId INT,
+            StepNo INT(3),
+            description VARCHAR(255),
+            FOREIGN KEY (LessonId)
+            REFERENCES lessons(id)
+            ON DELETE CASCADE
         )
     ";
         $this->db->exec($sql);
-        echo "Users table created successfully.\n";
+        echo "lesson_steps table created successfully.\n";
     }
 
     public function down()
     {
-        // SQL query to drop the users table if it exists
-        $sql = "DROP TABLE IF EXISTS users";
+        // SQL query to drop the Students table if it exists
+        $sql = "DROP TABLE IF EXISTS lesson_steps";
         $this->db->exec($sql);
-        echo "Users table dropped successfully.\n";
+        echo "lesson_steps table dropped successfully.\n";
     }
 }
