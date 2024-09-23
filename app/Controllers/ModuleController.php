@@ -1,9 +1,11 @@
 <?php
+
 namespace App\Controllers;
 
 use PDO;
 
-class ModuleController {
+class ModuleController
+{
     private $db;
 
     public function __construct()
@@ -14,15 +16,21 @@ class ModuleController {
 
     public function index($id)
     {
-        // Fetch the module based on ID (add your logic here)
-        $stmt = $this->db->prepare("SELECT * FROM modules WHERE id = ?");
-        $stmt->execute([$id]);
-        $module = $stmt->fetch(PDO::FETCH_ASSOC);
+        // Use a prepared statement to prevent SQL injection
+        $stmt = $this->db->prepare("SELECT * FROM modules WHERE CourseId = :id");
+        $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+        $stmt->execute();
 
-        if ($module) {
-            echo json_encode(['status' => 'success', 'module' => $module]);
+        // Fetch all records that match the CourseId
+        $modules = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        // Check if any modules were found
+        if ($modules && count($modules) > 0) {
+            // Return all modules as an array
+            echo json_encode(['status' => 'success', 'modules' => $modules]);
         } else {
-            echo json_encode(['status' => 'error', 'message' => 'Module not found.']);
+            // Return an error message if no modules were found
+            echo json_encode(['status' => 'error', 'message' => 'Modules not found.']);
         }
     }
 }
