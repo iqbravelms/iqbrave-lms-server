@@ -13,6 +13,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
 require_once __DIR__ . '/../vendor/autoload.php';
 require_once __DIR__ . '/../router.php';
 require_once __DIR__ . '/../app/Controllers/UserController.php';
+require_once __DIR__ . '/../app/Controllers/CourseController.php';
 
 // Instantiate the Router
 $router = new Router();
