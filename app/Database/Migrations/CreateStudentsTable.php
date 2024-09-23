@@ -47,15 +47,15 @@ class CreateStudentsTable
             address VARCHAR(100) NOT NULL,
             district VARCHAR(15) NOT NULL,
             city VARCHAR(50) NOT NULL,
-            nic VARCHAR(15) NOT NULL,
-            mobile VARCHAR(12) NOT NULL,
-            whatsapp VARCHAR(12) NOT NULL,
+            nic VARCHAR(15) NOT NULL UNIQUE,
+            mobile VARCHAR(12) NOT NULL UNIQUE,
+            whatsapp VARCHAR(12) NOT NULL UNIQUE,
             caretaker VARCHAR(50) NOT NULL,
             CaretakerMobile VARCHAR(12) NOT NULL,
-            email VARCHAR(100) NOT NULL,
-            username VARCHAR(20) NOT NULL,
+            email VARCHAR(100) NOT NULL UNIQUE,
+            username VARCHAR(20) NOT NULL UNIQUE,
             password VARCHAR(255) NOT NULL,
-            StuId VARCHAR(20) NOT NULL,
+            StuId VARCHAR(20) NOT NULL UNIQUE,
             status BOOLEAN NOT NULL DEFAULT false
         )
     ";
