@@ -4,31 +4,37 @@ namespace App\Controllers;
 
 use Firebase\JWT\JWT;
 use Dotenv\Dotenv;
+use PDO;
 
 class AuthController
 {
+    private $db;
 
-
-
-
-    public function login()
+    public function __construct()
     {
-        // Load environment variables
+        require_once __DIR__ . '/../config/database.php'; 
+        $this->db = $db; 
+    }
+    public function signin()
+    {
         $dotenv = Dotenv::createImmutable(__DIR__ . '/../..');
         $dotenv->load();
-
-        // Access secret key from the .env file
+    
         $secret_key = $_ENV['SECRET_KEY'];
         $issued_at = time();
         $expiration_time = $issued_at + 3600; // JWT valid for 1 hour
-
+    
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            // Dummy user validation (replace with actual DB check)
+
             $username = $_POST['username'];
             $password = $_POST['password'];
-
-            if ($username === 'testuser' && $password === 'password123') {
-                // Create JWT token
+    
+            $stmt = $this->db->prepare("SELECT password FROM students WHERE username = ?");
+            $stmt->execute([$username]);
+            $user = $stmt->fetch(PDO::FETCH_ASSOC);
+    
+            if ($user && password_verify($password, $user['password'])) {
+        
                 $payload = [
                     'iss' => "http://localhost", // Issuer
                     'iat' => $issued_at,         // Issued at
@@ -37,10 +43,9 @@ class AuthController
                         'username' => $username
                     ]
                 ];
-
+    
                 $jwt = JWT::encode($payload, $secret_key, 'HS256');
-
-                // Send the JWT token to the frontend
+    
                 echo json_encode([
                     'message' => 'Login successful',
                     'token' => $jwt
@@ -51,4 +56,5 @@ class AuthController
             }
         }
     }
+    
 }
