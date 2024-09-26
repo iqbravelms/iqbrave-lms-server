@@ -41,16 +41,16 @@ class ModuleSeeder
             CourseId, 
             name
         ) VALUES
-        (NULL, 1,'Database Systems 1'),
-        (NULL, 1,'Database Systems 11'),
-        (NULL, 1,'Software Programming'),
-        (NULL, 1,'Software Testing'),
-        (NULL, 1,'System Analysis and Design'),
-        (NULL, 1,'Web Programming'),
-        (NULL, 1,'Local Area Networks'),
-        (NULL, 1,'Manage workplace Information'),
-        (NULL, 1,'Manage workplace communication'),
-        (NULL, 1,'Planning and Scheduling Work at Workplace')
+        (NULL, 2,'Database Systems 1'),
+        (NULL, 2,'Database Systems 11'),
+        (NULL, 2,'Software Programming'),
+        (NULL, 2,'Software Testing'),
+        (NULL, 2,'System Analysis and Design'),
+        (NULL, 2,'Web Programming'),
+        (NULL, 2,'Local Area Networks'),
+        (NULL, 2,'Manage workplace Information'),
+        (NULL, 2,'Manage workplace communication'),
+        (NULL, 2,'Planning and Scheduling Work at Workplace')
     ";
 
     $this->db->exec($sql);
