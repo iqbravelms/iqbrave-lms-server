@@ -39,98 +39,55 @@ class LessonController
     {
         $dotenv = Dotenv::createImmutable(__DIR__ . '/../..');
         $dotenv->load();
-
+    
         // Access secret key from the .env file
         $secret_key = $_ENV['SECRET_KEY'];
-
+    
         $headers = getallheaders();
-
+    
         if (isset($headers['Authorization'])) {
             $jwt = str_replace('Bearer ', '', $headers['Authorization']); // Remove Bearer prefix
-
+    
             try {
                 $decoded = JWT::decode($jwt, new Key($secret_key, 'HS256'));
-
-                // Prepare the statement to fetch the lesson
-                $stmt = $this->db->prepare("SELECT * FROM lessons WHERE id = ?");
+    
+                // Prepare the statement to fetch the lesson and its steps in one query
+                $stmt = $this->db->prepare("
+                    SELECT l.*, ls.* 
+                    FROM lessons l 
+                    LEFT JOIN lesson_steps ls ON l.id = ls.LessonId 
+                    WHERE l.id = ?
+                ");
                 $stmt->execute([$id]);
                 $lessonData = $stmt->fetchAll(PDO::FETCH_ASSOC);
-                $lessons = []; // Initialize an empty array for lessons
-
-                foreach ($lessonData as $row) {
-                    $lessonId = $row['id'];
-
-                    // Initialize the lesson array
-                    if (!isset($lessons[$lessonId])) {
-                        $lessons[$lessonId] = [
-                            'id' => $row['id'],
-                            'topic' => $row['topic'],
-                            'link' => $row['link'],
-                            'Note' => $row['Note'],
-                            'steps' => [], // Populate this later
-                            'assignments' => [] // Populate this later
-                        ];
-                    }
-
-                    // Fetch steps for this lesson
-                    $stepStmt = $this->db->prepare("SELECT * FROM lesson_steps WHERE LessonId = ?");
-                    $stepStmt->execute([$lessonId]);
-                    $steps = $stepStmt->fetchAll(PDO::FETCH_ASSOC);
-
-                    foreach ($steps as $step) {
-                        // Avoid duplicates in steps
-                        if (!in_array($step, $lessons[$lessonId]['steps'])) {
-                            $lessons[$lessonId]['steps'][] = $step;
-                        }
-                    }
-
-                    // Fetch assignments for this lesson
-                    $assignmentStmt = $this->db->prepare("SELECT * FROM assignments WHERE LessonId = ?");
-                    $assignmentStmt->execute([$lessonId]);
-                    $assignments = $assignmentStmt->fetchAll(PDO::FETCH_ASSOC);
-
-                    foreach ($assignments as $assignment) {
-                        $assignmentId = $assignment['id'];
-
-                        // Check if the assignment already exists
-                        $index = array_search($assignmentId, array_column($lessons[$lessonId]['assignments'], 'id'));
-                        if ($index === false) {
-                            $lessons[$lessonId]['assignments'][] = [
-                                'id' => $assignmentId,
-                                'structure' => $assignment['structure'],
-                                'files' => [] // Initialize files as an empty array
+    
+                if ($lessonData) {
+                    $lessonId = $lessonData[0]['id']; // Assuming the lesson exists
+                    $lesson = [
+                        'id' => $lessonId,
+                        'topic' => $lessonData[0]['topic'],
+                        'link' => $lessonData[0]['link'],
+                        'Note' => $lessonData[0]['Note'],
+                        'steps' => [],
+                    ];
+    
+                    // Iterate through the result to extract steps
+                    foreach ($lessonData as $row) {
+                        if ($row['LessonId'] !== null) { // Check if the step exists
+                            $lesson['steps'][] = [
+                                'step_id' => $row['id'], // Assuming `id` is the step ID in lesson_steps
+                                'description' => $row['description'], // Change to the correct field name
+                                // Add more fields as needed
                             ];
-                            $index = count($lessons[$lessonId]['assignments']) - 1; // Get the index of the newly added assignment
-                        } else {
-                            $index = $index; // Existing assignment index
-                        }
-
-                        // Fetch files for this assignment
-                        $fileStmt = $this->db->prepare("SELECT * FROM assignment_files WHERE AssignmentId = ?");
-                        $fileStmt->execute([$assignmentId]);
-                        $files = $fileStmt->fetchAll(PDO::FETCH_ASSOC);
-
-                        foreach ($files as $file) {
-                            // Avoid duplicates in files
-                            $fileExists = false;
-                            foreach ($lessons[$lessonId]['assignments'][$index]['files'] as $existingFile) {
-                                if ($existingFile['name'] === $file['AssignmentName'] && $existingFile['filename'] === $file['FileName']) {
-                                    $fileExists = true;
-                                    break;
-                                }
-                            }
-                            if (!$fileExists) {
-                                $lessons[$lessonId]['assignments'][$index]['files'][] = [
-                                    'name' => $file['AssignmentName'],
-                                    'filename' => $file['FileName']
-                                ];
-                            }
                         }
                     }
+    
+                    // Return the lesson data
+                    echo json_encode(['status' => 'success', 'lesson' => $lesson]);
+                } else {
+                    // No lesson found
+                    echo json_encode(['status' => 'error', 'message' => 'No lesson found for this ID.']);
                 }
-
-                // Return the lessons data
-                echo json_encode(['status' => 'success', 'lessons' => array_values($lessons)]);
             } catch (\Exception $e) {
                 http_response_code(401);
                 echo json_encode(['message' => 'Access denied: ' . $e->getMessage()]);
@@ -140,4 +97,6 @@ class LessonController
             echo json_encode(['message' => 'No token provided']);
         }
     }
+    
+    
 }
