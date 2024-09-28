@@ -29,7 +29,7 @@ class AuthController
             $username = $_POST['username'];
             $password = $_POST['password'];
     
-            $stmt = $this->db->prepare("SELECT password,role,status FROM students WHERE username = ?");
+            $stmt = $this->db->prepare("SELECT id,password,role,status FROM students WHERE username = ?");
             $stmt->execute([$username]);
             $user = $stmt->fetch(PDO::FETCH_ASSOC);
     
@@ -41,7 +41,8 @@ class AuthController
                     'exp' => $expiration_time,   // Expiration time
                     'data' => [
                         'username' => $username,
-                        'role' => $user['role'],
+                        'role' => $user['role'], 
+                        'id' => $user['id'], 
                         'currunt_status' => $user['status']
                     ]
                 ];

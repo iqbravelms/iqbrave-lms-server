@@ -34,6 +34,14 @@ class AssignmentController
             try {
                 $decoded = JWT::decode($jwt, new Key($secret_key, 'HS256'));
 
+                // Ensure 'id' is present in the decoded JWT
+                $studentId = isset($decoded->id) ? $decoded->id : (isset($decoded->data->id) ? $decoded->data->id : null);
+
+                if (!$studentId) {
+                    echo json_encode(['status' => 'error', 'message' => 'Student ID not found in token']);
+                    return;
+                }
+
                 // Prepare statement to fetch assignments and their related files
                 $stmt = $this->db->prepare("
                     SELECT a.*, af.*
@@ -72,6 +80,44 @@ class AssignmentController
 
                     // Reformat to return an indexed array
                     $assignments = array_values($assignments);
+
+                    // Now, execute the SQL query for student assignments
+                    foreach ($assignments as &$assignment) {
+                        $studentAssignmentsData = [];
+                        foreach ($assignment['files'] as $file) {
+                            // Check if the student assignment already exists
+                            $checkStmt = $this->db->prepare("SELECT * FROM student_assignments WHERE StudentId = :studentId AND AssignmentFileId = :assignmentFileId");
+                            $checkStmt->execute(['studentId' => $studentId, 'assignmentFileId' => $file['file_id']]);
+                            $studentAssignments = $checkStmt->fetchAll(PDO::FETCH_ASSOC);
+
+                            // If no student assignments exist, insert data into student_assignments table
+                            if (empty($studentAssignments)) {
+                                $insertStmt = $this->db->prepare("
+                                    INSERT INTO student_assignments (AssignmentFileId, StudentId, StartDate, DueDate) 
+                                    VALUES (:assignmentFileId, :studentId, NOW(), DATE_ADD(NOW(), INTERVAL 14 DAY))
+                                ");
+                                $insertStmt->execute([
+                                    'assignmentFileId' => $file['file_id'],
+                                    'studentId' => $studentId
+                                ]);
+
+                                // Optionally fetch the newly inserted student assignment for confirmation
+                                $studentAssignmentsData[] = [
+                                    'id' => $this->db->lastInsertId(),
+                                    'AssignmentFileId' => $file['file_id'],
+                                    'StudentId' => $studentId,
+                                    'StartDate' => date('Y-m-d'),
+                                    'DueDate' => date('Y-m-d', strtotime('+14 days'))
+                                ];
+                            } else {
+                                // Add existing student assignments to the data
+                                $studentAssignmentsData = array_merge($studentAssignmentsData, $studentAssignments);
+                            }
+                        }
+
+                        // Assign all student assignments to the current assignment
+                        $assignment['student_assignments'] = $studentAssignmentsData;
+                    }
 
                     // Return the assignments data
                     echo json_encode(['status' => 'success', 'assignments' => $assignments]);
