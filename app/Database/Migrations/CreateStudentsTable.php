@@ -56,7 +56,8 @@ class CreateStudentsTable
             username VARCHAR(20) NOT NULL UNIQUE,
             password VARCHAR(255) NOT NULL,
             StuId VARCHAR(20) NOT NULL UNIQUE,
-            status BOOLEAN NOT NULL DEFAULT false
+            status BOOLEAN NOT NULL DEFAULT false,
+            role VARCHAR(15) NOT NULL DEFAULT 'user'
         )
     ";
         $this->db->exec($sql);
