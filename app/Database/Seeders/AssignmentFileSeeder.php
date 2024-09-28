@@ -41,20 +41,20 @@ class AssignmentFileSeeder
             AssignmentId,
             AssignmentNo,
             AssignmentName,
-            FileName
+            Link
         ) VALUES
-        (NULL, 1,1,'xampp install assignment 1','assignment1.pdf'),
-        (NULL, 1,2,'xampp install assignment 2','assignment2.pdf'),
-        (NULL, 1,3,'xampp install assignment 3','assignment3.pdf'),
-        (NULL, 2,1,'xampp install assignment 1','assignment1.pdf'),
-        (NULL, 2,2,'xampp install assignment 2','assignment2.pdf'),
-        (NULL, 2,3,'xampp install assignment 3','assignment3.pdf'),
-        (NULL, 3,1,'xampp install assignment 1','assignment1.pdf'),
-        (NULL, 3,2,'xampp install assignment 2','assignment2.pdf'),
-        (NULL, 3,3,'xampp install assignment 3','assignment3.pdf'),
-        (NULL, 4,1,'xampp install assignment 1','assignment1.pdf'),
-        (NULL, 4,2,'xampp install assignment 2','assignment2.pdf'),
-        (NULL, 4,3,'xampp install assignment 3','assignment3.pdf')
+        (NULL, 1,1,'xampp install assignment 1','https://drive.google.com/file/d/19Q8vidXYk4J2c15AWSid9Dp_bHY9Pkh5/view?usp=sharing'),
+        (NULL, 1,2,'xampp install assignment 2','https://drive.google.com/file/d/1OkxwLngHUOlTTGHaxLRMsriQA_Lh1KTQ/view?usp=sharing'),
+        (NULL, 1,3,'xampp install assignment 3','https://drive.google.com/file/d/1ja8U8uX9GR1sm2rioisnHonbfibClx78/view?usp=sharing'),
+        (NULL, 2,1,'xampp install assignment 1','https://drive.google.com/file/d/19Q8vidXYk4J2c15AWSid9Dp_bHY9Pkh5/view?usp=sharing'),
+        (NULL, 2,2,'xampp install assignment 2','https://drive.google.com/file/d/1OkxwLngHUOlTTGHaxLRMsriQA_Lh1KTQ/view?usp=sharing'),
+        (NULL, 2,3,'xampp install assignment 3','https://drive.google.com/file/d/1ja8U8uX9GR1sm2rioisnHonbfibClx78/view?usp=sharing'),
+        (NULL, 3,1,'xampp install assignment 1','https://drive.google.com/file/d/19Q8vidXYk4J2c15AWSid9Dp_bHY9Pkh5/view?usp=sharing'),
+        (NULL, 3,2,'xampp install assignment 2','https://drive.google.com/file/d/1OkxwLngHUOlTTGHaxLRMsriQA_Lh1KTQ/view?usp=sharing'),
+        (NULL, 3,3,'xampp install assignment 3','https://drive.google.com/file/d/1ja8U8uX9GR1sm2rioisnHonbfibClx78/view?usp=sharing'),
+        (NULL, 4,1,'xampp install assignment 1','https://drive.google.com/file/d/19Q8vidXYk4J2c15AWSid9Dp_bHY9Pkh5/view?usp=sharing'),
+        (NULL, 4,2,'xampp install assignment 2','https://drive.google.com/file/d/1OkxwLngHUOlTTGHaxLRMsriQA_Lh1KTQ/view?usp=sharing'),
+        (NULL, 4,3,'xampp install assignment 3','https://drive.google.com/file/d/1ja8U8uX9GR1sm2rioisnHonbfibClx78/view?usp=sharing')
     ";
 
         $this->db->exec($sql);

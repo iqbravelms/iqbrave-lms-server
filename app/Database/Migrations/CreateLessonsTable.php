@@ -43,7 +43,7 @@ class CreateLessonsTable
             id INT AUTO_INCREMENT PRIMARY KEY,
             ModuleId INT,
             topic VARCHAR(100) NOT NULL UNIQUE,
-            link VARCHAR(255) NOT NULL UNIQUE,
+            link VARCHAR(255) NOT NULL,
             Note LONGTEXT NOT NULL UNIQUE,
             FOREIGN KEY (ModuleId)
             REFERENCES modules(id)

@@ -42,7 +42,7 @@ class CreateAssignmentsTable
         CREATE TABLE IF NOT EXISTS assignments (
             id INT AUTO_INCREMENT PRIMARY KEY,
             LessonId int,
-            structure VARCHAR(255),
+            structure VARCHAR(100),
             FOREIGN KEY (LessonId)
             REFERENCES lessons(id)
             ON DELETE CASCADE

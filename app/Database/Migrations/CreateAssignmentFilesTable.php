@@ -44,7 +44,7 @@ class CreateAssignmentFilesTable
             AssignmentId int,
             AssignmentNo int,
             AssignmentName VARCHAR(100),
-            FileName VARCHAR(50),
+            Link VARCHAR(100),
             FOREIGN KEY (AssignmentId)
             REFERENCES assignments(id)
             ON DELETE CASCADE

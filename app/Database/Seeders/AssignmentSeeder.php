@@ -41,16 +41,16 @@ class AssignmentSeeder
             LessonId,
             structure
         ) VALUES
-        (NULL, 1,'image1.pdf'),
-        (NULL, 2,'image2.pdf'),
-        (NULL, 3,'image3.pdf'),
-        (NULL, 4,'image4.pdf'),
-        (NULL, 5,'image5.pdf'),
-        (NULL, 6,'image6.pdf'),
-        (NULL, 7,'image7.pdf'),
-        (NULL, 8,'image8.pdf'),
-        (NULL, 9,'image9.pdf'),
-        (NULL, 10,'image10.pdf')
+        (NULL, 1,'https://drive.google.com/file/d/1FwBbbacLsILfK-fZOTzpH7nP73jOuUX9/view?usp=sharing'),
+        (NULL, 2,'https://drive.google.com/file/d/1FwBbbacLsILfK-fZOTzpH7nP73jOuUX9/view?usp=sharing'),
+        (NULL, 3,'https://drive.google.com/file/d/1FwBbbacLsILfK-fZOTzpH7nP73jOuUX9/view?usp=sharing'),
+        (NULL, 4,'https://drive.google.com/file/d/1FwBbbacLsILfK-fZOTzpH7nP73jOuUX9/view?usp=sharing'),
+        (NULL, 5,'https://drive.google.com/file/d/1FwBbbacLsILfK-fZOTzpH7nP73jOuUX9/view?usp=sharing'),
+        (NULL, 6,'https://drive.google.com/file/d/1FwBbbacLsILfK-fZOTzpH7nP73jOuUX9/view?usp=sharing'),
+        (NULL, 7,'https://drive.google.com/file/d/1FwBbbacLsILfK-fZOTzpH7nP73jOuUX9/view?usp=sharing'),
+        (NULL, 8,'https://drive.google.com/file/d/1FwBbbacLsILfK-fZOTzpH7nP73jOuUX9/view?usp=sharing'),
+        (NULL, 9,'https://drive.google.com/file/d/1FwBbbacLsILfK-fZOTzpH7nP73jOuUX9/view?usp=sharing'),
+        (NULL, 10,'https://drive.google.com/file/d/1FwBbbacLsILfK-fZOTzpH7nP73jOuUX9/view?usp=sharing')
     ";
 
         $this->db->exec($sql);
