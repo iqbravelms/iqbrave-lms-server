@@ -13,3 +13,4 @@ $router->add('POST', '/api/signin', 'AuthController@signin');
 $router->add('GET', '/api/lesson/{id}', 'LessonController@getLesson');
 $router->add('GET', '/api/assignments/{id}', 'AssignmentController@getAssignment');
 $router->add('POST', '/api/submitassignment', 'AssignmentController@submitAssignment');
+$router->add('POST', '/api/studentregister', 'StudentController@studentRegister');
