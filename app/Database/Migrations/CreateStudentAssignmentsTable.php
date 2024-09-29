@@ -45,6 +45,7 @@ class CreateStudentAssignmentsTable
             StudentId INT,
             StartDate DATE,
             DueDate DATE,
+            link VARCHAR(100),
             SubmitedDate DATE,
             score INT,
             FOREIGN KEY (StudentId)

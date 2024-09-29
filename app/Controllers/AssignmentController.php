@@ -134,4 +134,83 @@ class AssignmentController
             echo json_encode(['message' => 'No token provided']);
         }
     }
+    // Assuming your route is set as $router->add('POST', '/api/submitassignment/{id}', 'AssignmentController@submitAssignment');
+
+    public function submitAssignment()
+    {
+        // Load environment variables
+        $dotenv = Dotenv::createImmutable(__DIR__ . '/../..');
+        $dotenv->load();
+
+        // Access secret key from the .env file
+        $secret_key = $_ENV['SECRET_KEY'];
+
+        // Get headers to check for Authorization token
+        $headers = getallheaders();
+
+        if (isset($headers['Authorization'])) {
+            $jwt = str_replace('Bearer ', '', $headers['Authorization']); // Remove Bearer prefix
+
+            try {
+                // Decode JWT token
+                $decoded = JWT::decode($jwt, new Key($secret_key, 'HS256'));
+
+                // Retrieve student ID from JWT payload
+                $studentId = isset($decoded->id) ? $decoded->id : (isset($decoded->data->id) ? $decoded->data->id : null);
+
+                if (!$studentId) {
+                    echo json_encode(['status' => 'error', 'message' => 'Student ID not found in token']);
+                    return;
+                }
+
+                // Handle POST request for assignment submission
+                if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+
+                    // Get the assignmentId from form data or route parameter
+                    $assignmentId = $_POST['assignmentId'] ?? null;
+                    $driveLink = $_POST['driveLink'] ?? null;
+
+                    // Check if all required fields are provided
+                    if (!$assignmentId || !$driveLink) {
+                        echo json_encode(['status' => 'error', 'message' => 'Missing required fields']);
+                        return;
+                    }
+
+                    // Prepare the SQL statement
+                    $insertStmt = $this->db->prepare("UPDATE student_assignments SET link = :link, SubmitedDate = NOW() WHERE StudentId= :StudentId AND AssignmentFileId = :assignmentId");
+
+                    // Bind the parameters
+                    $insertStmt->bindParam(':StudentId', $studentId); // Use ':link' as a placeholder for the drive link
+                    $insertStmt->bindParam(':link', $driveLink); // Use ':link' as a placeholder for the drive link
+                    $insertStmt->bindParam(':assignmentId', $assignmentId); // Assuming you have the assignmentId available for the update
+
+                    // Execute the prepared statement
+                    if ($insertStmt->execute()) {
+                        // Respond with success
+                        echo json_encode([
+                            'status' => 'success',
+                            'studentId' => $studentId,
+                            'assignmentId' => $assignmentId,
+                            'driveLink' => $driveLink
+                        ]);
+                    } else {
+                        // Handle execution failure
+                        echo json_encode(['status' => 'error', 'message' => 'Failed to update assignment']);
+                    }
+                } else {
+                    // Method not allowed response
+                    http_response_code(405); // Method Not Allowed
+                    echo json_encode(['status' => 'error', 'message' => 'Method not allowed']);
+                }
+            } catch (\Exception $e) {
+                // Invalid token or decoding failure
+                http_response_code(401); // Unauthorized
+                echo json_encode(['message' => 'Access denied: ' . $e->getMessage()]);
+            }
+        } else {
+            // No token provided
+            http_response_code(401); // Unauthorized
+            echo json_encode(['message' => 'No token provided']);
+        }
+    }
 }
