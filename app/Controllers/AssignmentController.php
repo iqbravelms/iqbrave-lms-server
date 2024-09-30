@@ -91,7 +91,7 @@ class AssignmentController
                             $studentAssignments = $checkStmt->fetchAll(PDO::FETCH_ASSOC);
 
                             // If no student assignments exist, insert data into student_assignments table
-                            if (empty($studentAssignments)) {
+                            if (empty($studentAssignments) && $decoded->data->role === 'user') {
                                 $insertStmt = $this->db->prepare("
                                     INSERT INTO student_assignments (AssignmentFileId, StudentId, StartDate, DueDate) 
                                     VALUES (:assignmentFileId, :studentId, NOW(), DATE_ADD(NOW(), INTERVAL 14 DAY))
@@ -120,7 +120,7 @@ class AssignmentController
                     }
 
                     // Return the assignments data
-                    echo json_encode(['status' => 'success', 'assignments' => $assignments]);
+                    echo json_encode(['status' => 'success', 'assignments' => $assignments, 'data' => $decoded]);
                 } else {
                     // No assignment found
                     echo json_encode(['status' => 'error', 'message' => 'No assignments found for this Lesson ID.']);
@@ -173,6 +173,10 @@ class AssignmentController
                     // Check if all required fields are provided
                     if (!$assignmentId || !$driveLink) {
                         echo json_encode(['status' => 'error', 'message' => 'Missing required fields']);
+                        return;
+                    }
+                    if ($decoded->data->role === 'admin') {
+                        echo json_encode(['status' => 'error', 'message' => 'You can not submit assignmnet']);
                         return;
                     }
 
