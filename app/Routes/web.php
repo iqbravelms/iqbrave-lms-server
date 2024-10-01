@@ -1,5 +1,5 @@
 <?php
-$router->add('GET', '/api/users', 'UserController@index');
+$router->add('GET', '/api/users', 'UserControllerForAdmin@index');
 $router->add('GET', '/api/protected', 'ApiController@accessProtectedResource');
 
 
@@ -21,3 +21,9 @@ $router->add('POST', '/api/userregister', 'AdminController@adminRegister');
 $router->add('GET', '/api/deactivateuser/{id}', 'AdminController@deactivateUser');
 $router->add('GET', '/api/activateuser/{id}', 'AdminController@activateUser');
 
+$router->add('GET', '/api/allstudent', 'UserControllerForAdmin@getAllStudent');
+$router->add('POST', '/api/updatestudent', 'UserControllerForAdmin@updateStudent');
+$router->add('POST', '/api/studentregister', 'UserControllerForAdmin@registerStudent');
+$router->add('GET', '/api/deactivatestudent/{id}', 'UserControllerForAdmin@deactivateStudent');
+$router->add('GET', '/api/activatestudent/{id}', 'UserControllerForAdmin@activateStudent');
+$router->add('GET', '/api/deletestudent/{id}', 'UserControllerForAdmin@deleteStudent');
