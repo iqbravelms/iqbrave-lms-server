@@ -14,3 +14,10 @@ $router->add('GET', '/api/lesson/{id}', 'LessonController@getLesson');
 $router->add('GET', '/api/assignments/{id}', 'AssignmentController@getAssignment');
 $router->add('POST', '/api/submitassignment', 'AssignmentController@submitAssignment');
 $router->add('POST', '/api/studentregister', 'StudentController@studentRegister');
+
+$router->add('GET', '/api/alladmin', 'AdminController@getAllAdmin');
+$router->add('POST', '/api/updateuser', 'AdminController@updateAdimin');
+$router->add('POST', '/api/userregister', 'AdminController@adminRegister');
+$router->add('GET', '/api/deactivateuser/{id}', 'AdminController@deactivateUser');
+$router->add('GET', '/api/activateuser/{id}', 'AdminController@activateUser');
+
