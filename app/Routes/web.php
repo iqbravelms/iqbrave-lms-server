@@ -27,3 +27,8 @@ $router->add('POST', '/api/studentregister', 'UserControllerForAdmin@registerStu
 $router->add('GET', '/api/deactivatestudent/{id}', 'UserControllerForAdmin@deactivateStudent');
 $router->add('GET', '/api/activatestudent/{id}', 'UserControllerForAdmin@activateStudent');
 $router->add('GET', '/api/deletestudent/{id}', 'UserControllerForAdmin@deleteStudent');
+
+$router->add('GET', '/api/allcourse', 'CourseControllerAdmin@getAllCourses');
+$router->add('POST', '/api/updatecourse', 'CourseControllerAdmin@updateCourse');
+$router->add('POST', '/api/courseregister', 'CourseControllerAdmin@courseRegister');
+$router->add('GET', '/api/deletecourse/{id}', 'CourseControllerAdmin@deleteCourse');
