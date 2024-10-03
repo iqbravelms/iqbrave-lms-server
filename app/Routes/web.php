@@ -37,3 +37,6 @@ $router->add('GET', '/api/getallmodules/{id}', 'ModulesContorollerAdmin@getAllMo
 $router->add('POST', '/api/addmodule', 'ModulesContorollerAdmin@addModule');
 $router->add('POST', '/api/updatemodule', 'ModulesContorollerAdmin@updateModule');
 $router->add('GET', '/api/deletemodule/{id}', 'ModulesContorollerAdmin@deleteModule');
+
+$router->add('GET', '/api/getcoursewithmodule', 'AddLessonController@getAllCorse');
+$router->add('GET', '/api/getalesson/{id}', 'AddLessonController@getLesson');
