@@ -373,4 +373,94 @@ class AddLessonController
             echo json_encode(['message' => 'No token provided']);
         }
     }
+
+    public function addLesson()
+    {
+        $dotenv = Dotenv::createImmutable(__DIR__ . '/../..');
+        $dotenv->load();
+
+        $secret_key = $_ENV['SECRET_KEY'];
+        if (!$secret_key) {
+            http_response_code(500);
+            echo json_encode(['status' => 'error', 'message' => 'Secret key is missing from the environment file.']);
+            return;
+        }
+
+        $headers = getallheaders();
+        $authorizationHeader = isset($headers['Authorization']) ? $headers['Authorization'] : (isset($headers['authorization']) ? $headers['authorization'] : null);
+
+        if ($authorizationHeader) {
+            $jwt = str_replace('Bearer ', '', $authorizationHeader);
+            try {
+                $decoded = JWT::decode($jwt, new Key($secret_key, 'HS256'));
+                if ($decoded->data->role === 'admin') {
+                    try {
+                        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+                            $topicName = isset($_POST['topicName']) ? trim($_POST['topicName']) : null;
+                            $linkName = isset($_POST['linkName']) ? trim($_POST['linkName']) : null;
+                            $noteName = isset($_POST['noteName']) ? trim($_POST['noteName']) : null;
+                            $moduleId = isset($_POST['moduleId']) ? intval($_POST['moduleId']) : null; // Collect ModuleId
+
+                            $steps = isset($_POST['steps']) ? json_decode($_POST['steps'], true) : [];
+                            if (!$topicName || !$linkName || !$noteName || !$moduleId) {
+                                echo json_encode(['error' => 'Missing required fields.']);
+                                exit();
+                            }
+                            try {
+                                // Begin transaction
+                                $this->db->beginTransaction();
+                                $lessonSql = "INSERT INTO lessons (ModuleId, topic, link, Note) VALUES (:moduleId, :topic, :link, :note)";
+                                $stmt = $this->db->prepare($lessonSql);
+                                $stmt->execute([
+                                    ':moduleId' => $moduleId,
+                                    ':topic' => $topicName,
+                                    ':link' => $linkName,
+                                    ':note' => $noteName,
+                                ]);
+                                $lessonId = $this->db->lastInsertId();
+                                $stepSql = "INSERT INTO lesson_steps (LessonId, StepNo, description) VALUES (:lessonId, :stepNo, :description)";
+                                $stmt = $this->db->prepare($stepSql);
+                                foreach ($steps as $index => $step) {
+                                    $stmt->execute([
+                                        ':lessonId' => $lessonId,
+                                        ':stepNo' => $index + 1, // Step numbers start from 1
+                                        ':description' => $step['description'],
+                                    ]);
+                                }
+                                $this->db->commit();
+                                header('Content-Type: application/json');
+                                echo json_encode([
+                                    'status' => 'success',
+                                    'message' => 'Lesson and steps added successfully.',
+                                ]);
+                            } catch (\PDOException $e) {
+                                // Rollback transaction if something goes wrong
+                                $this->db->rollBack();
+                                header('Content-Type: application/json');
+                                echo json_encode([
+                                    'status' => 'error',
+                                    'message' => 'Error adding lesson: ' . $e->getMessage(),
+                                ]);
+                            }
+                        } else {
+                            echo json_encode(['error' => 'Invalid request method.']);
+                            return;
+                        }
+                    } catch (\PDOException $e) {
+                        http_response_code(500);
+                        header('Content-Type: application/json');
+                        echo json_encode(['status' => 'error', 'message' => 'Database error: ' . $e->getMessage()]);
+                    }
+                }
+            } catch (\Exception $e) {
+                http_response_code(401);
+                header('Content-Type: application/json');
+                echo json_encode(['message' => 'Access denied: ' . $e->getMessage()]);
+            }
+        } else {
+            http_response_code(401);
+            header('Content-Type: application/json');
+            echo json_encode(['message' => 'No token provided']);
+        }
+    }
 }
