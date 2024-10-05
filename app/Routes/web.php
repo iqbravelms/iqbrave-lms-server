@@ -44,3 +44,4 @@ $router->add('GET', '/api/getsteps/{id}', 'AddLessonController@getSteps');
 $router->add('POST', '/api/updatelesson', 'AddLessonController@updateLesson');
 $router->add('POST', '/api/updatestep', 'AddLessonController@updateStep');
 $router->add('GET', '/api/getassignmentsforadmin/{id}', 'AssignmentControllerAdimn@getAssignment');
+$router->add('POST', '/api/updateassignment', 'AssignmentControllerAdimn@updateAssignmentAndStructure');
