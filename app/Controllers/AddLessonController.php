@@ -400,9 +400,19 @@ class AddLessonController
                             $linkName = isset($_POST['linkName']) ? trim($_POST['linkName']) : null;
                             $noteName = isset($_POST['noteName']) ? trim($_POST['noteName']) : null;
                             $moduleId = isset($_POST['moduleId']) ? intval($_POST['moduleId']) : null; // Collect ModuleId
+                            $structure = isset($_POST['structure']) ? trim($_POST['structure']) : null;
+                            $assignmentNo1 = isset($_POST['assignmentNo1']) ? trim($_POST['assignmentNo1']) : null;
+                            $assignmentName1 = isset($_POST['assignmentName1']) ? trim($_POST['assignmentName1']) : null;
+                            $Link1 = isset($_POST['Link1']) ? trim($_POST['Link1']) : null;
+                            $assignmentNo2 = isset($_POST['assignmentNo2']) ? trim($_POST['assignmentNo2']) : null;
+                            $assignmentName2 = isset($_POST['assignmentName2']) ? trim($_POST['assignmentName2']) : null;
+                            $Link2 = isset($_POST['Link2']) ? trim($_POST['Link2']) : null;
+                            $assignmentNo3 = isset($_POST['assignmentNo3']) ? trim($_POST['assignmentNo3']) : null;
+                            $assignmentName3 = isset($_POST['assignmentName3']) ? trim($_POST['assignmentName3']) : null;
+                            $Link3 = isset($_POST['Link3']) ? trim($_POST['Link3']) : null;
 
                             $steps = isset($_POST['steps']) ? json_decode($_POST['steps'], true) : [];
-                            if (!$topicName || !$linkName || !$noteName || !$moduleId) {
+                            if (!$topicName || !$linkName || !$noteName || !$moduleId || !$assignmentNo1 || !$assignmentNo2 || !$assignmentNo3 || !$assignmentName1 || !$assignmentName2 || !$assignmentName3 || !$Link1 || !$Link2 || !$Link3 || !$structure) {
                                 echo json_encode(['error' => 'Missing required fields.']);
                                 exit();
                             }
@@ -427,6 +437,39 @@ class AddLessonController
                                         ':description' => $step['description'],
                                     ]);
                                 }
+                                $assignmentSql = "INSERT INTO assignments (LessonId, structure) VALUES (:lessonId, :structure)";
+                                $stmt = $this->db->prepare($assignmentSql);
+
+                                $stmt->execute([
+                                    ':lessonId' => $lessonId,
+                                    ':structure' => $structure,
+                                ]);
+                                $assignmentId = $this->db->lastInsertId();
+                                $assignmentSql = "INSERT INTO assignment_files (AssignmentId, AssignmentNo, AssignmentName, Link) VALUES (:AssignmentId, :AssignmentNo, :AssignmentName, :Link)";
+                                $stmt = $this->db->prepare($assignmentSql);
+
+                                $stmt->execute([
+                                    ':AssignmentId' => $assignmentId,
+                                    ':AssignmentNo' => $assignmentNo1,
+                                    ':AssignmentName' => $assignmentName1,
+                                    ':Link' => $Link1,
+                                ]);
+
+                                $stmt->execute([
+                                    ':AssignmentId' => $assignmentId,
+                                    ':AssignmentNo' => $assignmentNo2,
+                                    ':AssignmentName' => $assignmentName2,
+                                    ':Link' => $Link2,
+                                ]);
+
+                                $stmt->execute([
+                                    ':AssignmentId' => $assignmentId,
+                                    ':AssignmentNo' => $assignmentNo3,
+                                    ':AssignmentName' => $assignmentName3,
+                                    ':Link' => $Link3,
+                                ]);
+
+
                                 $this->db->commit();
                                 header('Content-Type: application/json');
                                 echo json_encode([
