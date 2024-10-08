@@ -53,8 +53,8 @@ class ModuleSeeder
         (NULL, 2,'Planning and Scheduling Work at Workplace')
     ";
 
-    $this->db->exec($sql);
-    echo "Modules table seeded successfully.\n";
+    // $this->db->exec($sql);
+    // echo "Modules table seeded successfully.\n";
 }
 
 }

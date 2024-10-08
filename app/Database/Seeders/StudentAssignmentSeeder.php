@@ -59,7 +59,7 @@ class StudentAssignmentSeeder
         (NULL, 12,4,'2024-1-1','2024-1-14','2024-1-14',40)
     ";
 
-        $this->db->exec($sql);
-        echo "assignment_files table seeded successfully.\n";
+        // $this->db->exec($sql);
+        // echo "assignment_files table seeded successfully.\n";
     }
 }

@@ -57,7 +57,7 @@ class AssignmentFileSeeder
         (NULL, 4,3,'xampp install assignment 3','https://drive.google.com/file/d/1ja8U8uX9GR1sm2rioisnHonbfibClx78/view?usp=sharing')
     ";
 
-        $this->db->exec($sql);
-        echo "assignment_files table seeded successfully.\n";
+        // $this->db->exec($sql);
+        // echo "assignment_files table seeded successfully.\n";
     }
 }

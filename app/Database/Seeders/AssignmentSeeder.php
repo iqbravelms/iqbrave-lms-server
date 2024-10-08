@@ -53,7 +53,7 @@ class AssignmentSeeder
         (NULL, 10,'https://drive.google.com/file/d/1FwBbbacLsILfK-fZOTzpH7nP73jOuUX9/view?usp=sharing')
     ";
 
-        $this->db->exec($sql);
-        echo "Assignments table seeded successfully.\n";
+        // $this->db->exec($sql);
+        // echo "Assignments table seeded successfully.\n";
     }
 }

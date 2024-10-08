@@ -44,8 +44,8 @@ class CourseSeeder
         (NULL, 'Diploma in Information and Communication Technology')
     ";
 
-    $this->db->exec($sql);
-    echo "Courses table seeded successfully.\n";
+    // $this->db->exec($sql);
+    // echo "Courses table seeded successfully.\n";
 }
 
 }

@@ -63,7 +63,7 @@ class StudentSeeder
 ";
 
 
-        $this->db->exec($sql);
-        echo "Students table seeded successfully.\n";
+        // $this->db->exec($sql);
+        // echo "Students table seeded successfully.\n";
     }
 }

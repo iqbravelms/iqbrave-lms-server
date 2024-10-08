@@ -51,8 +51,8 @@ class LessonStepSeeder
         (NULL, 2,4,'then enter')
     ";
 
-    $this->db->exec($sql);
-    echo "lesson_steps table seeded successfully.\n";
+    // $this->db->exec($sql);
+    // echo "lesson_steps table seeded successfully.\n";
 }
 
 }

@@ -55,7 +55,7 @@ class LessonSeeder
         (NULL, 1,'Delete table','https://www.youtube.com/embed/QBEhmkNKjXQ','Open phpMyAdmin, select table, click \"Drop,\" confirm deletion, click \"Go.\"')
     ";
 
-        $this->db->exec($sql);
-        echo "lessons table seeded successfully.\n";
+        // $this->db->exec($sql);
+        // echo "lessons table seeded successfully.\n";
     }
 }

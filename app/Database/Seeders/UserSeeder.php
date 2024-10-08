@@ -34,7 +34,7 @@ class UserSeeder
 
     public function run()
     {
-        $passwordHash = password_hash('password', PASSWORD_BCRYPT);
+        $passwordHash = password_hash('password123', PASSWORD_BCRYPT);
         // Insert sample data into the users table
         $sql = "
             INSERT INTO users (
@@ -51,12 +51,10 @@ class UserSeeder
                 role, 
                 status
             ) VALUES
-            (NULL, 'Mahesh', 'Perera', '0771234567', '0771234567', 'mahesh@example.com', '123 Street', '901234567V', 'dmahesh9810', '$passwordHash', 'admin', false),
-            (NULL, 'Sachi', 'Kumar', '0779876543', '0779876543', 'sachi@example.com', '456 Avenue', '912345678V', 'sachik', '$passwordHash', 'moderator', false),
-            (NULL, 'Jane', 'Doe', '0776543210', '0776543210', 'jane@example.com', '789 Road', '923456789V', 'janed', '$passwordHash', 'viewer', false)
+            (NULL, 'Mahesh', 'Dissanayaka', '0773132973', '0703295647', 'mahesh9810@gmail.com', 'pahalawela uva palwatta buttala', '981620780V', 'dmahesh9810', '$passwordHash', 'admin', true)
         ";
 
         $this->db->exec($sql);
-        echo "Users table seeded successfully.\n";
+        echo "User table seeded successfully.\n";
     }
 }
